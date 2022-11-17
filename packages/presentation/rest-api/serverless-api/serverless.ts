@@ -43,6 +43,58 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
+    dynamodb: {
+      stages: ['dev'],
+      start: {
+        port: 8000,
+        inMemory: true,
+        migrate: true,
+        seed: {
+          local: {
+            sources: [
+              {
+                table: "test",
+                sources: ["./seed/test.json"],
+              },
+            ],
+          },
+        }
+      },
+    },
+  },
+  resources: {
+    Resources: {
+      DynamoDBTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "test",
+          AttributeDefinitions: [
+            {
+              AttributeName: "DataType",
+              AttributeType: "S",
+            },
+            {
+              AttributeName: "ID",
+              AttributeType: "S",
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: "DataType",
+              KeyType: "HASH",
+            },
+            {
+              AttributeName: "ID",
+              KeyType: "RANGE",
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+      },
+    },
   },
 };
 
