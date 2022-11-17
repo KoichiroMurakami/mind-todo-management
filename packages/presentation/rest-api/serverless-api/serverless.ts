@@ -1,13 +1,14 @@
 import type { AWS } from '@serverless/typescript';
 
 import hello from '@functions/hello';
+import getUser from '@functions/getUser';
 
 const serverlessConfiguration: AWS = {
   service: 'serverless-api',
   frameworkVersion: '3',
   plugins: [
       'serverless-esbuild',
-      'serverless-webpack',
+      // 'serverless-webpack',
       'serverless-dynamodb-local',
       'serverless-offline'
   ],
@@ -26,7 +27,10 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello },
+  functions: { 
+    hello, 
+    getUser
+  },
   package: { individually: true },
   custom: {
     esbuild: {
